@@ -38,13 +38,13 @@ def insert_equipment():
     body_keys = body.keys()
     for key in required_fields:
         if key not in body_keys:
-            return {"messsage": "MISSING_PARAMETER"}, 400
+            return {"message": "MISSING_PARAMETER"}, 400
 
     for field in body:
         if not isinstance(body[field], str):
-            return {"messsage": "WRONG_FORMAT"}, 400
+            return {"message": "WRONG_FORMAT"}, 400
         if not len(body[field]):
-            return {"messsage": "MISSING_PARAMETER"}, 400
+            return {"message": "MISSING_PARAMETER"}, 400
 
     create_equipment = equipmentService.insert_equipment(body)
     return create_equipment
@@ -73,7 +73,7 @@ def update_equipment_status():
     body = request.get_json()
 
     if "code" not in body:
-        return {"messsage": "MISSING_PARAMETER"}, 400
+        return {"message": "MISSING_PARAMETER"}, 400
 
     codes = body.get("code")
     codes_is_list = isinstance(codes, list)
@@ -82,13 +82,13 @@ def update_equipment_status():
         codes = [codes]
 
     if not len(codes):
-        return {"messsage": "MISSING_PARAMETER"}, 400
+        return {"message": "MISSING_PARAMETER"}, 400
 
     for code in codes:
         if not isinstance(code, str):
-            return {"messsage": "WRONG_FORMAT"}, 400
+            return {"message": "WRONG_FORMAT"}, 400
         if not len(code) or not len(codes):
-            return {"messsage": "MISSING_PARAMETER"}, 400
+            return {"message": "MISSING_PARAMETER"}, 400
 
     update_equipment = equipmentService.update_equipment_status(codes)
     return update_equipment
@@ -115,7 +115,7 @@ def active_equipment():
     query = request.args.get('vessel_code')
 
     if query is None:
-        return {"messsage": "MISSING_PARAMETER"}, 400
+        return {"message": "MISSING_PARAMETER"}, 400
 
     list_equipments = equipmentService.active_equipment(query)
 
@@ -137,13 +137,13 @@ def list_equipment_by_name():
       400:
         description: returns MISSING_PARAMETER if the equipment_name is not sent
       409:
-        description: returns EQUIPMENT_NAME_DO_NOT_EXIST if the name is not already in the system
+        description: returns NO_EQUIPMENT_NAME if the name is not already in the system
     """
 
     query = request.args.get('equipment_name')
 
     if query is None:
-        return {"messsage": "MISSING_PARAMETER"}, 400
+        return {"message": "MISSING_PARAMETER"}, 400
 
     list_equipments = equipmentService.list_equipment_by_name(query)
 
