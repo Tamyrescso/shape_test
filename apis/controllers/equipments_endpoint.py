@@ -1,5 +1,4 @@
-from flask import Blueprint, request, jsonify
-from sqlalchemy import func, extract, and_
+from flask import Blueprint, request
 from apis.services.equipments import equipmentService
 
 
@@ -116,9 +115,43 @@ def active_equipment():
         description: returns a json with equipments key and a list of equipments
       400:
         description: returns MISSING_PARAMETER if the vessel_code is not sent
-      400:
-        description: returns WRONG_FORMAT if any parameter are sent in the wrong format
       409:
         description: returns NO_VESSEL if the vessel is not already in the system
     """
-    return {"message": "OK"}, 200
+
+    query = request.args.get('vessel_code')
+
+    if query is None:
+        return {"messsage": "MISSING_PARAMETER"}, 400
+
+    list_equipments = equipmentService.active_equipment(query)
+
+    return list_equipments
+
+
+@equipments_blueprint.route("/list_equipments", methods=["GET"])
+def list_equipment_by_name():
+    """Return a list of equipments by name and which vessel it belongs
+    ---
+    parameters:
+        - name: equipment_name
+          in: query
+          type: string
+          required: true
+    responses:
+      200:
+        description: returns a json with equipments key, a list of equipments and the vessel_code related
+      400:
+        description: returns MISSING_PARAMETER if the equipment_name is not sent
+      409:
+        description: returns EQUIPMENT_NAME_DO_NOT_EXIST if the name is not already in the system
+    """
+
+    query = request.args.get('equipment_name')
+
+    if query is None:
+        return {"messsage": "MISSING_PARAMETER"}, 400
+
+    list_equipments = equipmentService.list_equipment_by_name(query)
+
+    return list_equipments
