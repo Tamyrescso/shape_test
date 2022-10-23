@@ -1,15 +1,15 @@
-from flask import Flask, request
+from flask import Flask
 from flasgger import Swagger
 
 from apis.models.model import db
 from apis.healthcheck import healthcheck_blueprint
-from apis.vessels_endpoint import vessels_blueprint
-from apis.equipments_endpoint import equipments_blueprint
+from apis.controllers.vessels_endpoint import vessels_blueprint
+from apis.controllers.equipments_endpoint import equipments_blueprint
 
 
 def create_app(app_name='VESSELS', test_config=False, production_conf=False):
     app = Flask(app_name)
-    swagger = Swagger(app)
+    Swagger(app)
     if test_config:
         app.config.from_object('config.TestConfig')
     else:
@@ -25,6 +25,6 @@ def create_app(app_name='VESSELS', test_config=False, production_conf=False):
     return app
 
 
-#if __name__ == "__main__":
+# if __name__ == "__main__":
 #    app = create_app(production_conf=False)
 #    app.run(host="0.0.0.0", port='5000', debug=True)
