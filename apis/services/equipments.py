@@ -31,3 +31,16 @@ class equipmentService:
         db.session.commit()
 
         return {"message": "OK"}, 201
+
+    def update_equipment_status(codes):
+        for code in codes:
+            check_code_in_db = equipment.query.filter_by(code=code).first()
+            print(check_code_in_db)
+            if check_code_in_db is None:
+                return {"message": "NO_CODE"}, 409
+            else:
+                check_code_in_db.active = False
+
+        db.session.commit()
+
+        return {"message": "OK"}, 201
