@@ -1,9 +1,6 @@
 from flask import Blueprint, request, jsonify
 from sqlalchemy import func, extract, and_
-
-from apis.models.equipment import equipment
-from apis.models.vessel import vessel
-from apis.models.model import db
+from apis.services.equipments import equipmentService
 
 
 equipments_blueprint = Blueprint("equipments", __name__)
@@ -42,7 +39,23 @@ def insert_equipment():
       409:
         description: returns NO_VESSEL if the vessel code is not already in the system
     """
-    return {"message": "OK"}, 201
+
+    body = request.get_json()
+    required_fields = ['name', 'code', 'location', 'vessel_code']
+
+    body_keys = body.keys()
+    for key in required_fields:
+        if key not in body_keys:
+            return {"messsage": "MISSING_PARAMETER"}, 400
+
+    for field in body:
+        if len(body[field]) == 0:
+            return {"messsage": "MISSING_PARAMETER"}, 400
+        if type(body[field]) is not str:
+            return {"messsage": "WRONG_FORMAT"}, 400
+
+    create_equipment = equipmentService.insert_equipment(body)
+    return create_equipment
 
 
 @equipments_blueprint.route("/update_equipment_status", methods=["PUT"])
