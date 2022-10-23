@@ -49,10 +49,10 @@ def insert_equipment():
             return {"messsage": "MISSING_PARAMETER"}, 400
 
     for field in body:
-        if len(body[field]) == 0:
-            return {"messsage": "MISSING_PARAMETER"}, 400
-        if type(body[field]) is not str:
+        if not isinstance(body[field], str):
             return {"messsage": "WRONG_FORMAT"}, 400
+        if not len(body[field]):
+            return {"messsage": "MISSING_PARAMETER"}, 400
 
     create_equipment = equipmentService.insert_equipment(body)
     return create_equipment
@@ -77,7 +77,29 @@ def update_equipment_status():
       409:
         description: returns NO_CODE if the equipment code is not already in the system
     """
-    return {"message": "OK"}, 201
+
+    body = request.get_json()
+
+    if "code" not in body:
+        return {"messsage": "MISSING_PARAMETER"}, 400
+
+    codes = body.get("code")
+    codes_is_list = isinstance(codes, list)
+
+    if not codes_is_list:
+        codes = [codes]
+
+    if not len(codes):
+        return {"messsage": "MISSING_PARAMETER"}, 400
+
+    for code in codes:
+        if not isinstance(code, str):
+            return {"messsage": "WRONG_FORMAT"}, 400
+        if not len(code) or not len(codes):
+            return {"messsage": "MISSING_PARAMETER"}, 400
+
+    update_equipment = equipmentService.update_equipment_status(codes)
+    return update_equipment
 
 
 @equipments_blueprint.route("/active_equipments", methods=["GET"])
