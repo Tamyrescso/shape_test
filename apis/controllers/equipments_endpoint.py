@@ -10,22 +10,15 @@ def insert_equipment():
     """Insert a new equipment
     ---
     parameters:
-        - name: vessel_code
+        - name: body
           in: body
-          type: string
           required: true
-        - name: code
-          in: body
-          type: string
-          required: true
-        - name: name
-          in: body
-          type: string
-          required: true
-        - name: location
-          in: body
-          type: string
-          required: true
+          example: {
+            vessel_code: string,
+            code: string,
+            location: string,
+            name: string,
+            }
     responses:
       201:
         description: returns OK if the equipment was correctly inserted
@@ -62,10 +55,10 @@ def update_equipment_status():
     """Set a equipment or a list of those to inactive
     ---
     parameters:
-        - name: code
+        - name: body
           in: body
-          type: string
           required: true
+          example: {code: string}
     responses:
       201:
         description: returns OK if the equipments were correctly updated

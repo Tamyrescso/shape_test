@@ -9,10 +9,10 @@ def insert_vessel():
     """Insert a new vessel
     ---
     parameters:
-        - name: code
+        - name: body
           in: body
-          type: string
           required: true
+          example: {code: string}
     responses:
         201:
           description: returns OK if the vessel was correctly inserted
