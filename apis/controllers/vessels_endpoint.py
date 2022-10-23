@@ -30,10 +30,10 @@ def insert_vessel():
         return {"messsage": "MISSING_PARAMETER"}, 400
 
     code = body.get("code")
-    if len(code) == 0:
-        return {"messsage": "MISSING_PARAMETER"}, 400
-    if type(code) is not str:
+    if not isinstance(code, str):
         return {"messsage": "WRONG_FORMAT"}, 400
+    if not len(code):
+        return {"messsage": "MISSING_PARAMETER"}, 400
 
     create_vessel = vesselsService.insert_vessel(code)
     return create_vessel
