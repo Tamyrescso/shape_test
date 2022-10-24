@@ -1,5 +1,7 @@
 from flask import Blueprint, request
 from apis.services.vessels import vesselsService
+from apis.utils.response_message import MESSAGE
+
 
 vessels_blueprint = Blueprint("vessels", __name__)
 
@@ -27,13 +29,13 @@ def insert_vessel():
     body = request.get_json()
 
     if "code" not in body:
-        return {"message": "MISSING_PARAMETER"}, 400
+        return MESSAGE['MISSING_PARAM'], 400
 
     code = body.get("code")
     if not isinstance(code, str):
-        return {"message": "WRONG_FORMAT"}, 400
+        return MESSAGE['WRONG_FORMAT'], 400
     if not len(code):
-        return {"message": "MISSING_PARAMETER"}, 400
+        return MESSAGE['MISSING_PARAM'], 400
 
     create_vessel = vesselsService.insert_vessel(code)
     return create_vessel

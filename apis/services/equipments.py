@@ -2,6 +2,7 @@ from flask import jsonify
 from apis.models.equipment import equipment
 from apis.models.vessel import vessel
 from apis.models.model import db
+from apis.utils.response_message import MESSAGE
 
 
 class equipmentService:
@@ -13,12 +14,12 @@ class equipmentService:
 
         check_code_in_db = equipment.query.filter_by(code=code).first()
         if check_code_in_db is not None:
-            return {"message": "REPEATED_CODE"}, 409
+            return MESSAGE['REPEATED_CODE'], 409
 
         check_vessel_code_in_db = vessel.query.filter_by(
             code=vessel_code).first()
         if check_vessel_code_in_db is None:
-            return {"message": "NO_VESSEL"}, 409
+            return MESSAGE['NO_VESSEL'], 409
 
         vessel_id = check_vessel_code_in_db.id
 
@@ -32,27 +33,27 @@ class equipmentService:
         db.session.add(new_equipment)
         db.session.commit()
 
-        return {"message": "OK"}, 201
+        return MESSAGE['OK'], 201
 
     def update_equipment_status(codes):
         for code in codes:
             check_code_in_db = equipment.query.filter_by(code=code).first()
 
             if check_code_in_db is None:
-                return {"message": "NO_CODE"}, 409
+                return MESSAGE['NO_CODE'], 409
             else:
                 check_code_in_db.active = False
 
         db.session.commit()
 
-        return {"message": "OK"}, 201
+        return MESSAGE['OK'], 201
 
     def active_equipment(vessel_code):
         check_vessel_code_in_db = vessel.query.filter_by(
             code=vessel_code).first()
 
         if check_vessel_code_in_db is None:
-            return {"message": "NO_VESSEL"}, 409
+            return MESSAGE['NO_VESSEL'], 409
 
         vessel_id = check_vessel_code_in_db.id
 
@@ -80,7 +81,7 @@ class equipmentService:
             name=equipment_name).first()
 
         if check_name_in_db is None:
-            return {"message": "EQUIPMENT_NAME_DO_NOT_EXIST"}, 409
+            return MESSAGE['NO_EQUIPMENT_NAME'], 409
 
         list_by_name = db.session.query(equipment, vessel).join(vessel).\
             filter(equipment.name == equipment_name)

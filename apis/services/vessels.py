@@ -1,5 +1,6 @@
 from apis.models.model import db
 from apis.models.vessel import vessel
+from apis.utils.response_message import MESSAGE
 
 
 class vesselsService:
@@ -7,10 +8,10 @@ class vesselsService:
         check_code_in_database = vessel.query.filter_by(code=code).first()
 
         if check_code_in_database is not None:
-            return {"message": "FAIL"}, 409
+            return MESSAGE['FAIL'], 409
 
         new_vessel = vessel(code=code)
         db.session.add(new_vessel)
         db.session.commit()
 
-        return {"message": "OK"}, 201
+        return MESSAGE['OK'], 201
