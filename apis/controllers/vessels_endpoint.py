@@ -29,13 +29,13 @@ def insert_vessel():
     body = request.get_json()
 
     if "code" not in body:
-        return MESSAGE['MISSING_PARAM'], 400
+        return MESSAGE["MISSING_PARAM"], 400
 
     code = body.get("code")
     if not isinstance(code, str):
-        return MESSAGE['WRONG_FORMAT'], 400
+        return MESSAGE["WRONG_FORMAT"], 400
     if not len(code):
-        return MESSAGE['MISSING_PARAM'], 400
+        return MESSAGE["MISSING_PARAM"], 400
 
     create_vessel = vesselsService.insert_vessel(code)
     return create_vessel

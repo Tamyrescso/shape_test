@@ -33,18 +33,18 @@ def insert_equipment():
     """
 
     body = request.get_json()
-    required_fields = ['name', 'code', 'location', 'vessel_code']
+    required_fields = ["name", "code", "location", "vessel_code"]
 
     body_keys = body.keys()
     for key in required_fields:
         if key not in body_keys:
-            return MESSAGE['MISSING_PARAM'], 400
+            return MESSAGE["MISSING_PARAM"], 400
 
     for field in body:
         if not isinstance(body[field], str):
-            return MESSAGE['WRONG_FORMAT'], 400
+            return MESSAGE["WRONG_FORMAT"], 400
         if not len(body[field]):
-            return MESSAGE['MISSING_PARAM'], 400
+            return MESSAGE["MISSING_PARAM"], 400
 
     create_equipment = equipmentService.insert_equipment(body)
     return create_equipment
@@ -73,7 +73,7 @@ def update_equipment_status():
     body = request.get_json()
 
     if "code" not in body:
-        return MESSAGE['MISSING_PARAM'], 400
+        return MESSAGE["MISSING_PARAM"], 400
 
     codes = body.get("code")
     codes_is_list = isinstance(codes, list)
@@ -82,13 +82,13 @@ def update_equipment_status():
         codes = [codes]
 
     if not len(codes):
-        return MESSAGE['MISSING_PARAM'], 400
+        return MESSAGE["MISSING_PARAM"], 400
 
     for code in codes:
         if not isinstance(code, str):
-            return MESSAGE['WRONG_FORMAT'], 400
+            return MESSAGE["WRONG_FORMAT"], 400
         if not len(code) or not len(codes):
-            return MESSAGE['MISSING_PARAM'], 400
+            return MESSAGE["MISSING_PARAM"], 400
 
     update_equipment = equipmentService.update_equipment_status(codes)
     return update_equipment
@@ -112,10 +112,10 @@ def active_equipment():
         description: returns NO_VESSEL if the vessel is not already in the system
     """
 
-    query = request.args.get('vessel_code')
+    query = request.args.get("vessel_code")
 
     if query is None:
-        return MESSAGE['MISSING_PARAM'], 400
+        return MESSAGE["MISSING_PARAM"], 400
 
     list_equipments = equipmentService.active_equipment(query)
 
@@ -140,10 +140,10 @@ def list_equipment_by_name():
         description: returns NO_EQUIPMENT_NAME if the name is not already in the system
     """
 
-    query = request.args.get('equipment_name')
+    query = request.args.get("equipment_name")
 
     if query is None:
-        return MESSAGE['MISSING_PARAM'], 400
+        return MESSAGE["MISSING_PARAM"], 400
 
     list_equipments = equipmentService.list_equipment_by_name(query)
 

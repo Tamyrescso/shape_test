@@ -8,10 +8,10 @@ class vesselsService:
         check_code_in_database = vessel.query.filter_by(code=code).first()
 
         if check_code_in_database is not None:
-            return MESSAGE['FAIL'], 409
+            return MESSAGE["FAIL"], 409
 
         new_vessel = vessel(code=code)
         db.session.add(new_vessel)
         db.session.commit()
 
-        return MESSAGE['OK'], 201
+        return MESSAGE["OK"], 201

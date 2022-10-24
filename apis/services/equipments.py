@@ -14,52 +14,45 @@ class equipmentService:
 
         check_code_in_db = equipment.query.filter_by(code=code).first()
         if check_code_in_db is not None:
-            return MESSAGE['REPEATED_CODE'], 409
+            return MESSAGE["REPEATED_CODE"], 409
 
-        check_vessel_code_in_db = vessel.query.filter_by(
-            code=vessel_code).first()
+        check_vessel_code_in_db = vessel.query.filter_by(code=vessel_code).first()
         if check_vessel_code_in_db is None:
-            return MESSAGE['NO_VESSEL'], 409
+            return MESSAGE["NO_VESSEL"], 409
 
         vessel_id = check_vessel_code_in_db.id
 
         new_equipment = equipment(
-            code=code,
-            name=name,
-            location=location,
-            vessel_id=vessel_id,
-            active=True
-            )
+            code=code, name=name, location=location, vessel_id=vessel_id, active=True
+        )
         db.session.add(new_equipment)
         db.session.commit()
 
-        return MESSAGE['OK'], 201
+        return MESSAGE["OK"], 201
 
     def update_equipment_status(codes):
         for code in codes:
             check_code_in_db = equipment.query.filter_by(code=code).first()
 
             if check_code_in_db is None:
-                return MESSAGE['NO_CODE'], 409
+                return MESSAGE["NO_CODE"], 409
             else:
                 check_code_in_db.active = False
 
         db.session.commit()
 
-        return MESSAGE['OK'], 201
+        return MESSAGE["OK"], 201
 
     def active_equipment(vessel_code):
-        check_vessel_code_in_db = vessel.query.filter_by(
-            code=vessel_code).first()
+        check_vessel_code_in_db = vessel.query.filter_by(code=vessel_code).first()
 
         if check_vessel_code_in_db is None:
-            return MESSAGE['NO_VESSEL'], 409
+            return MESSAGE["NO_VESSEL"], 409
 
         vessel_id = check_vessel_code_in_db.id
 
         active_equipments_by_vessel = equipment.query.filter_by(
-            active=True,
-            vessel_id=vessel_id
+            active=True, vessel_id=vessel_id
         ).all()
 
         list_equipments = []
@@ -77,24 +70,26 @@ class equipmentService:
         return jsonify(list_equipments), 200
 
     def list_equipment_by_name(equipment_name):
-        check_name_in_db = equipment.query.filter_by(
-            name=equipment_name).first()
+        check_name_in_db = equipment.query.filter_by(name=equipment_name).first()
 
         if check_name_in_db is None:
-            return MESSAGE['NO_EQUIPMENT_NAME'], 409
+            return MESSAGE["NO_EQUIPMENT_NAME"], 409
 
-        list_by_name = db.session.query(equipment, vessel).join(vessel).\
-            filter(equipment.name == equipment_name)
+        list_by_name = (
+            db.session.query(equipment, vessel)
+            .join(vessel)
+            .filter(equipment.name == equipment_name)
+        )
 
         equipments_collection = {}
         for equip_obj, vessel_obj in list_by_name:
             equip = {
-                    "id": equip_obj.id,
-                    "name": equip_obj.name,
-                    "code": equip_obj.code,
-                    "location": equip_obj.location,
-                    "active": equip_obj.active,
-                }
+                "id": equip_obj.id,
+                "name": equip_obj.name,
+                "code": equip_obj.code,
+                "location": equip_obj.location,
+                "active": equip_obj.active,
+            }
 
             if equipments_collection.get(vessel_obj.code):
                 equipments_collection[vessel_obj.code].append(equip)
@@ -106,7 +101,7 @@ class equipmentService:
             formatted_equipments_list.append(
                 {
                     "vessel_code": key,
-                    f'equipments_{equipment_name}': equipments_collection[key]
+                    f"equipments_{equipment_name}": equipments_collection[key],
                 }
             )
 
