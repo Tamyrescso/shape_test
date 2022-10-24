@@ -32,7 +32,7 @@ def insert_vessel():
         return MESSAGE["MISSING_PARAM"], 400
 
     code = body.get("code")
-    if not isinstance(code, str):
+    if not isinstance(code, str) or len(code) > 8:
         return MESSAGE["WRONG_FORMAT"], 400
     if not len(code):
         return MESSAGE["MISSING_PARAM"], 400

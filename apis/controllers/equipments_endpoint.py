@@ -40,6 +40,9 @@ def insert_equipment():
         if key not in body_keys:
             return MESSAGE["MISSING_PARAM"], 400
 
+    if len(body.get("code")) > 8:
+        return MESSAGE["WRONG_FORMAT"], 400
+
     for field in body:
         if not isinstance(body[field], str):
             return MESSAGE["WRONG_FORMAT"], 400
