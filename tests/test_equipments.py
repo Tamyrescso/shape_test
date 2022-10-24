@@ -140,17 +140,28 @@ def test_insert_with_empty_value(app):
 
 
 def test_insert_with_wrong_format(app):
-    result = app.test_client().post(
-        "/equipment/insert_equipment",
-        json={
+    scenarios = [
+        {
             "vessel_code": 123,
             "code": "5310B9D7",
             "location": "brazil",
             "name": "compressor",
         },
-    )
-    assert result.get_json().get("message") == "WRONG_FORMAT"
-    assert result.status_code == 400
+        {
+            "vessel_code": "MV102",
+            "code": "5310B9D7JVF",
+            "location": "brazil",
+            "name": "compressor",
+        },
+    ]
+
+    for scenario in scenarios:
+        result = app.test_client().post(
+            "/equipment/insert_equipment",
+            json=scenario
+        )
+        assert result.get_json().get("message") == "WRONG_FORMAT"
+        assert result.status_code == 400
     with app.app_context():
         query = db.session.query(equipment)
         query_results = db.session.execute(query).all()
@@ -324,7 +335,8 @@ def test_get_active_equipments_by_vessel(app):
         },
     )
 
-    result = app.test_client().get("/equipment/active_equipments?vessel_code=MV102")
+    result = app.test_client().get(
+        "/equipment/active_equipments?vessel_code=MV102")
     assert result.get_json() == [
         {
             "active": True,
@@ -358,7 +370,8 @@ def test_get_active_equipments_without_query_parameter(app):
 
 
 def test_get_active_equipments_if_vessel_does_not_exist(app):
-    result = app.test_client().get("/equipment/active_equipments?vessel_code=MV103")
+    result = app.test_client().get(
+        "/equipment/active_equipments?vessel_code=MV103")
     assert result.get_json().get("message") == "NO_VESSEL"
     assert result.status_code == 409
     with app.app_context():
@@ -428,7 +441,8 @@ def test_get_equipments_by_name_without_query_parameter(app):
 
 
 def test_get_equipments_by_name_if_does_not_exist(app):
-    result = app.test_client().get("/equipment/list_equipments?equipment_name=motor")
+    result = app.test_client().get(
+        "/equipment/list_equipments?equipment_name=motor")
     assert result.get_json().get("message") == "NO_EQUIPMENT_NAME"
     assert result.status_code == 409
     with app.app_context():
