@@ -52,7 +52,6 @@ def test_insert_replicated(app):
 def test_insert_without_parameter_code_or_empty_value(app):
     scenarios = [
         {"code": ""},
-        {"code": ""},
         {"wrong": "MV102"},
     ]
 

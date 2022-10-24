@@ -62,7 +62,6 @@ def test_insert_without_vessel_code(app):
         "/equipment/insert_equipment",
         json={"code": "5310B9D7", "location": "brazil", "name": "compressor"},
     )
-    print(result.get_json())
     assert result.get_json().get("message") == "MISSING_PARAMETER"
     assert result.status_code == 400
     with app.app_context():
