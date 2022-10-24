@@ -12,7 +12,7 @@ The assignment involves completing a backend to manage different equipment of an
 - The application is containerized with **Docker**.
 - The tests were written using **Pytest**.
 
-![tests coverage](https://github.com/Tamyrescso/images_projects/blob/master/test-coverage-shape.png)
+![tests coverage](https://github.com/Tamyrescso/images_projects/blob/master/tests-coverage-shape-challenge.png)
 
 
 ### Necessary to run the project:
