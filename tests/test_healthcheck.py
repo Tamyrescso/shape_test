@@ -3,7 +3,8 @@ from flask_migrate import Migrate
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 
 from apis.app import create_app
 from apis.models.model import db
@@ -12,7 +13,7 @@ from apis.models.model import db
 @pytest.fixture(scope="module")
 def app():
     app = create_app(test_config=True)
-    
+
     with app.app_context():
         db.create_all()
         Migrate(app, db)
@@ -25,6 +26,5 @@ def app():
 
 
 def test_heath_check(app):
-    result = app.test_client().get('/')
+    result = app.test_client().get("/")
     assert result.status_code == 200
-
